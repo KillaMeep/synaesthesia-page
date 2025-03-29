@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Synæsthesia</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 50px;
+        }
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 10px #ff4081, 0 0 20px #ff4081;
+        }
+        p {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            max-width: 800px;
+            margin: 0 auto 20px;
+        }
+        .mixcloud-embed {
+            margin: 30px 0;
+        }
+        .social-links a {
+            color: #ff4081;
+            text-decoration: none;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+        .social-links a:hover {
+            color: #fff;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 40px;
+            color: #ff4081;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s ease;
+        }
+        .back-link:hover {
+            color: #fff;
+        }
+    </style>
+    <script>
+        async function fetchLatestEpisode() {
+            const username = 'synaesthesia23'; // Replace with your Mixcloud username
+            const apiUrl = `https://api.mixcloud.com/${username}/cloudcasts/`;
+
+            // Start measuring API request time
+            const startApiTime = performance.now();
+
+            try {
+                // Fetch the latest episode
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+
+                // Calculate and log the time taken for the API request
+                const endApiTime = performance.now();
+                console.log(`API request time: ${(endApiTime - startApiTime).toFixed(2)} ms`);
+
+                // Get the latest episode URL
+                const latestEpisode = data.data[0]?.url; // Optional chaining for safety
+
+                if (latestEpisode) {
+                    // Start measuring iframe rendering time
+                    const startIframeTime = performance.now();
+
+                    // Set the iframe to embed the latest episode
+                    const iframe = document.getElementById('mixcloud-iframe');
+                    iframe.src = `https://player-widget.mixcloud.com/widget/iframe/?hide_cover=1&feed=${encodeURIComponent(latestEpisode)}`;
+
+                    // Calculate and log the time taken to set the iframe src
+                    const endIframeTime = performance.now();
+                    console.log(`Iframe rendering time: ${(endIframeTime - startIframeTime).toFixed(2)} ms`);
+                } else {
+                    console.log("No latest episode found.");
+                }
+
+            } catch (error) {
+                console.error("Error fetching latest episode:", error);
+            }
+        }
+
+        // Load the latest episode when the page loads
+        window.onload = fetchLatestEpisode;
+
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>DJ Synæsthesia</h1>
+        <p>Based in Denver, Colorado, DJ Synæsthesia is the alias of electronic music producer and DJ, Lisa Rolfes. With a passion for crafting immersive auditory experiences, DJ Synæsthesia has been active in the local club scene, delivering eclectic sets that span various electronic genres.</p>
+        <p>Lisa hosts the weekly electronic radio show, "Submerged," where she explores diverse electronic soundscapes, showcasing her versatility and deep understanding of the genre.</p>
+        <div class="mixcloud-embed">
+            <!-- Dynamic iframe for the latest episode -->
+            <iframe id="mixcloud-iframe" width="100%" height="120" frameborder="0"></iframe>
+        </div>
+        <p>Explore more mixes and stay updated with the latest episodes of "Submerged" on Mixcloud.</p>
+        <div class="social-links">
+            <a href="https://www.mixcloud.com/lisa-rolfes2/" target="_blank">Mixcloud</a>
+            <a href="https://www.facebook.com/DJSynaesthesia" target="_blank">Facebook</a>
+            <a href="https://www.instagram.com/dj_synaesthesia/" target="_blank">Instagram</a>
+        </div>
+        <a href="index.html" class="back-link">Back to Portfolio</a>
+    </div>
+</body>
+</html>
